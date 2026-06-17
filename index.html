@@ -4,7 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DCAFS Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
+</script>
 <style>
   /* ─── TOKENS ─────────────────────────────────────────────── */
   :root {
@@ -17,7 +20,7 @@
     --grey-50:#f7f9fb;
     --grey-100:#eef1f5;
     --grey-300:#c8d0db;
-    --grey-500:#8a95a3;
+    --grey-500:#6b7785;
     --grey-800:#2c3a47;
     --text:   #1a2633;
 
@@ -143,7 +146,7 @@
     letter-spacing: .02em;
   }
   .badge-blue { background: var(--blue-lt); color: var(--blue); }
-  .badge-green { background: var(--green-lt); color: #5a8c1e; }
+  .badge-green { background: var(--green-lt); color: #4a7a18; }
 
   /* main */
   #main {
@@ -180,7 +183,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .07em;
-    color: var(--grey-500);
+    color: var(--grey-800);
     margin-bottom: 14px;
   }
   .card-title span { color: var(--blue); }
@@ -206,9 +209,9 @@
   .stat-tile.green { border-color: var(--green); }
   .stat-tile.teal  { border-color: #00b8d4; }
   .stat-tile.orange{ border-color: #f5a623; }
-  .stat-label { font-size: .72rem; color: var(--grey-500); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+  .stat-label { font-size: .72rem; color: var(--grey-800); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
   .stat-value { font-size: 1.9rem; font-weight: 800; color: var(--text); line-height: 1.1; }
-  .stat-sub { font-size: .75rem; color: var(--grey-500); }
+  .stat-sub { font-size: .75rem; color: var(--grey-800); }
 
   /* ─── GRID LAYOUTS ───────────────────────────────────────── */
   .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
@@ -226,7 +229,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .06em;
-    color: var(--grey-500);
+    color: var(--grey-800);
     border-bottom: 2px solid var(--grey-100);
     white-space: nowrap;
   }
@@ -234,6 +237,7 @@
     padding: 10px 12px;
     border-bottom: 1px solid var(--grey-100);
     vertical-align: middle;
+    color: var(--text);
   }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover td { background: var(--grey-50); }
@@ -256,7 +260,7 @@
   .bar-num   { flex: 0 0 30px; text-align: right; font-weight: 700; color: var(--grey-800); }
 
   /* ─── TAGS / PILLS ───────────────────────────────────────── */
-  .pill-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .pill-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
   .pill {
     font-size: .72rem;
     font-weight: 600;
@@ -277,7 +281,7 @@
     border-radius: 50%;
     flex-shrink: 0;
   }
-  .freq-text { flex: 1; font-size: .82rem; }
+  .freq-text { flex: 1; font-size: .82rem; color: var(--text); }
   .freq-badge {
     width: 22px; height: 22px;
     border-radius: 50%;
@@ -301,14 +305,14 @@
     font-weight: 800;
     color: var(--text);
   }
-  .section-hdr p { font-size: .78rem; color: var(--grey-500); margin-top: 2px; }
+  .section-hdr p { font-size: .78rem; color: var(--grey-800); margin-top: 2px; }
 
   /* ─── PAGE HEADER ────────────────────────────────────────── */
   .page-hdr {
     margin-bottom: 24px;
   }
   .page-hdr h1 { font-size: 1.35rem; font-weight: 900; color: var(--text); }
-  .page-hdr p  { font-size: .82rem; color: var(--grey-500); margin-top: 4px; }
+  .page-hdr p  { font-size: .82rem; color: var(--grey-800); margin-top: 4px; }
 
   /* ─── CHART WRAPPER ──────────────────────────────────────── */
   .chart-box { position: relative; }
@@ -322,15 +326,32 @@
     background: var(--white);
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
-    padding: 14px 16px;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    position: relative;
   }
-  .dp-name { font-weight: 700; font-size: .88rem; }
-  .dp-meta { font-size: .75rem; color: var(--grey-500); }
-  .dp-funding { font-size: 1.1rem; font-weight: 800; color: var(--blue); }
-  .dp-chains { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .dp-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .dp-name { font-weight: 800; font-size: .95rem; color: var(--text); }
+  .dp-rank {
+    background: var(--blue);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .dp-funding { font-size: 1.3rem; font-weight: 800; color: var(--blue); }
+  .dp-meta { font-size: .78rem; color: var(--grey-800); font-weight: 500; }
+  .dp-chains { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
 
   /* ─── RESEARCH TABLE ─────────────────────────────────────── */
   .station-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--grey-100); }
@@ -343,8 +364,8 @@
     flex-shrink: 0;
     font-size: 1rem;
   }
-  .station-name { font-weight: 700; font-size: .85rem; }
-  .station-focus { font-size: .76rem; color: var(--grey-500); }
+  .station-name { font-weight: 700; font-size: .85rem; color: var(--text); }
+  .station-focus { font-size: .76rem; color: var(--grey-800); }
 
   /* ─── PMU FUNCTIONS ──────────────────────────────────────── */
   .pmu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
@@ -366,7 +387,7 @@
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  .pmu-text { font-size: .8rem; font-weight: 500; }
+  .pmu-text { font-size: .8rem; font-weight: 500; color: var(--text); }
 
   /* ─── KEY POLICY CARD ────────────────────────────────────── */
   .policy-item {
@@ -385,8 +406,8 @@
   }
   .star { width: 10px; height: 10px; border-radius: 50%; }
   .star.filled { background: var(--green); }
-  .star.empty  { background: var(--grey-200, #ddd); }
-  .policy-text { font-size: .83rem; font-weight: 500; }
+  .star.empty  { background: #d0d5dd; }
+  .policy-text { font-size: .83rem; font-weight: 500; color: var(--text); }
 
   /* ─── MOBILE ─────────────────────────────────────────────── */
   @media (max-width: 768px) {
@@ -401,6 +422,7 @@
     .grid-2, .grid-3, .grid-12 { grid-template-columns: 1fr; }
     .bar-label { flex: 0 0 100px; font-size: .74rem; }
     .chart-box.h380 { height: 280px; }
+    .dp-header { flex-direction: column; }
   }
   @media (max-width: 420px) {
     .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -553,7 +575,7 @@
     <section id="page-portfolio" class="page">
       <div class="page-hdr">
         <h1>Development Partner Portfolio</h1>
-        <p>Individual partner investment footprints and value chain coverage</p>
+        <p>Individual partner investment footprints — ranked by total funding (highest to lowest)</p>
       </div>
       <div id="dpCards" class="grid-3"></div>
     </section>
@@ -714,12 +736,12 @@
       </div>
       <div class="card" style="margin-bottom:20px">
         <div class="card-title">Expected Functions of <span>Streamlined PMUs</span></div>
-        <p style="font-size:.78rem;color:var(--grey-500);margin-bottom:14px">Oversight of all projects in the Agriculture Sector</p>
+        <p style="font-size:.78rem;color:var(--grey-800);margin-bottom:14px">Oversight of all projects in the Agriculture Sector</p>
         <div class="pmu-grid" id="pmuGrid"></div>
       </div>
       <div class="card">
         <div class="card-title">Research Station <span>Rehabilitation Requests</span></div>
-        <p style="font-size:.78rem;color:var(--grey-500);margin-bottom:14px">Note: Ministry has not yet provided the concept note and budget</p>
+        <p style="font-size:.78rem;color:var(--grey-800);margin-bottom:14px">Note: Ministry has not yet provided the concept note and budget</p>
         <div id="researchStations"></div>
       </div>
     </section>
@@ -893,16 +915,40 @@ const DATA = {
 ═══════════════════════════════════════════════════════════════ */
 const BLUE   = '#0070C0';
 const GREEN  = '#8CC63E';
-const BLUES  = ['#0070C0','#005499','#00A0E0','#80C8F0','#003D70','#B3DDF5','#0090D0','#4db8ff','#002a4d','#00bfff','#1a8cff','#99d6ff','#004b99','#66afff'];
-const GREENS = ['#8CC63E','#5a8c1e','#aed55e','#d5eea8','#3d6618'];
 
 /* ═══════════════════════════════════════════════════════════════
    CHART.JS DEFAULTS
 ═══════════════════════════════════════════════════════════════ */
 Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
 Chart.defaults.font.size = 11;
-Chart.defaults.color = '#8a95a3';
+Chart.defaults.color = '#6b7785';
 Chart.defaults.plugins.legend.display = false;
+
+// Register datalabels plugin globally
+Chart.register(ChartDataLabels);
+
+// Default datalabels config
+const defaultDatalabels = {
+  anchor: 'end',
+  align: 'end',
+  offset: 2,
+  font: { weight: 'bold', size: 10 },
+  color: '#2c3a47',
+};
+
+const barDatalabels = {
+  ...defaultDatalabels,
+  anchor: 'end',
+  align: 'end',
+  offset: 0,
+};
+
+const hBarDatalabels = {
+  ...defaultDatalabels,
+  anchor: 'end',
+  align: 'end',
+  offset: 2,
+};
 
 /* ═══════════════════════════════════════════════════════════════
    NAVIGATION
@@ -921,6 +967,12 @@ function navigate(el) {
   document.getElementById('page-' + pid).classList.add('active');
   document.getElementById('page-title').textContent = pageTitles[pid] || '';
   if (window.innerWidth <= 768) closeSidebar();
+  // Resize charts after navigation
+  setTimeout(() => {
+    Object.values(Chart.instances).forEach(chart => {
+      if (chart && chart.resize) chart.resize();
+    });
+  }, 100);
 }
 
 let sidebarOpen = window.innerWidth > 768;
@@ -941,6 +993,12 @@ function toggleSidebar() {
       main.classList.add('full');
       tb.classList.add('full');
     }
+    // Resize charts after sidebar toggle
+    setTimeout(() => {
+      Object.values(Chart.instances).forEach(chart => {
+        if (chart && chart.resize) chart.resize();
+      });
+    }, 300);
   }
 }
 function openSidebar() {
@@ -996,17 +1054,30 @@ function renderBarList(containerId, items, maxVal, colorFn) {
    OVERVIEW PAGE
 ═══════════════════════════════════════════════════════════════ */
 function buildOverview() {
-  // Funding bar
+  // Funding bar - uniform BLUE color
   const sorted = [...DATA.partners].sort((a,b) => b.funding - a.funding);
   new Chart(document.getElementById('chartFundingBar'), {
     type: 'bar',
     data: {
       labels: sorted.map(p => p.name),
-      datasets: [{ data: sorted.map(p => p.funding), backgroundColor: BLUES, borderRadius: 5 }]
+      datasets: [{ 
+        data: sorted.map(p => p.funding), 
+        backgroundColor: BLUE, 
+        borderRadius: 5 
+      }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.y.toFixed(1) + 'M' } } },
+      responsive: true, 
+      maintainAspectRatio: false,
+      plugins: { 
+        tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.y.toFixed(1) + 'M' } },
+        datalabels: {
+          ...barDatalabels,
+          formatter: v => '$' + v.toFixed(1) + 'M',
+          color: '#2c3a47',
+          font: { weight: 'bold', size: 9 },
+        }
+      },
       scales: {
         x: { grid:{display:false}, ticks:{maxRotation:45,font:{size:9}} },
         y: { grid:{color:'#eef1f5'}, ticks:{callback:v=>'$'+v+'M'} }
@@ -1014,17 +1085,33 @@ function buildOverview() {
     }
   });
 
-  // Projects bar
+  // Projects bar - uniform GREEN color
   const psorted = [...DATA.partners].sort((a,b) => b.projects - a.projects);
   new Chart(document.getElementById('chartProjectsBar'), {
     type: 'bar',
     data: {
       labels: psorted.map(p => p.name),
-      datasets: [{ data: psorted.map(p => p.projects), backgroundColor: GREENS.concat(BLUES), borderRadius: 5 }]
+      datasets: [{ 
+        data: psorted.map(p => p.projects), 
+        backgroundColor: GREEN, 
+        borderRadius: 5 
+      }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: { x:{grid:{display:false},ticks:{maxRotation:45,font:{size:9}}}, y:{grid:{color:'#eef1f5'},ticks:{stepSize:1}} }
+      responsive: true, 
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          ...barDatalabels,
+          formatter: v => v,
+          color: '#2c3a47',
+          font: { weight: 'bold', size: 10 },
+        }
+      },
+      scales: { 
+        x:{grid:{display:false},ticks:{maxRotation:45,font:{size:9}}}, 
+        y:{grid:{color:'#eef1f5'},ticks:{stepSize:1}} 
+      }
     }
   });
 
@@ -1044,15 +1131,21 @@ function buildOverview() {
 ═══════════════════════════════════════════════════════════════ */
 function buildPortfolio() {
   const container = document.getElementById('dpCards');
-  container.innerHTML = DATA.partners.map(p => {
+  // Sort partners by funding descending for ranking
+  const sorted = [...DATA.partners].sort((a,b) => b.funding - a.funding);
+  container.innerHTML = sorted.map((p, idx) => {
     const chainArr = p.chains.split(', ');
+    const rank = idx + 1;
     return `
       <div class="dp-card">
-        <div class="dp-name">${p.name}</div>
+        <div class="dp-header">
+          <div class="dp-name">${p.name}</div>
+          <div class="dp-rank">Rank: #${rank}</div>
+        </div>
         <div class="dp-funding">$${p.funding.toFixed(2)}M</div>
         <div class="dp-meta">${p.projects} project${p.projects>1?'s':''} &nbsp;·&nbsp; ${p.chainCount} value chain${p.chainCount>1?'s':''}</div>
         <div class="dp-chains">
-          ${chainArr.map(c=>`<span class="pill">${c.trim()}</span>`).join('')}
+          ${chainArr.map(c=>`<span class="pill blue">${c.trim()}</span>`).join('')}
         </div>
       </div>`;
   }).join('');
@@ -1068,12 +1161,38 @@ function buildBudget() {
 
   new Chart(document.getElementById('chartBudgetPie'), {
     type: 'doughnut',
-    data: { labels, datasets: [{ data: pcts, backgroundColor: colors, borderWidth: 2, borderColor:'#fff', hoverOffset: 6 }] },
+    data: { 
+      labels, 
+      datasets: [{ 
+        data: pcts, 
+        backgroundColor: colors, 
+        borderWidth: 2, 
+        borderColor:'#fff', 
+        hoverOffset: 6 
+      }] 
+    },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true, 
+      maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, position:'right', labels:{font:{size:10},boxWidth:12,padding:10} },
-        tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.parsed + '%' } }
+        legend: { 
+          display: true, 
+          position:'right', 
+          labels:{
+            font:{size:10}, 
+            boxWidth:12, 
+            padding:10, 
+            color: '#2c3a47'
+          } 
+        },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.parsed + '%' } },
+        datalabels: {
+          color: '#fff',
+          font: { weight: 'bold', size: 11 },
+          formatter: v => v > 5 ? v + '%' : '',
+          anchor: 'center',
+          align: 'center',
+        }
       },
       cutout: '60%'
     }
@@ -1100,11 +1219,28 @@ function buildValueChains() {
     type: 'bar',
     data: {
       labels: DATA.densityProjects.map(d=>d.vc),
-      datasets: [{ data: DATA.densityProjects.map(d=>d.val), backgroundColor: BLUE, borderRadius: 4 }]
+      datasets: [{ 
+        data: DATA.densityProjects.map(d=>d.val), 
+        backgroundColor: BLUE, 
+        borderRadius: 4 
+      }]
     },
     options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x:{grid:{color:'#eef1f5'}}, y:{grid:{display:false},ticks:{font:{size:10}}} }
+      indexAxis: 'y', 
+      responsive: true, 
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          ...hBarDatalabels,
+          formatter: v => v,
+          color: '#2c3a47',
+          font: { weight: 'bold', size: 10 },
+        }
+      },
+      scales: { 
+        x:{grid:{color:'#eef1f5'}}, 
+        y:{grid:{display:false},ticks:{font:{size:10}}} 
+      }
     }
   });
 
@@ -1113,11 +1249,28 @@ function buildValueChains() {
     type: 'bar',
     data: {
       labels: DATA.densityDonors.map(d=>d.vc),
-      datasets: [{ data: DATA.densityDonors.map(d=>d.val), backgroundColor: GREEN, borderRadius: 4 }]
+      datasets: [{ 
+        data: DATA.densityDonors.map(d=>d.val), 
+        backgroundColor: GREEN, 
+        borderRadius: 4 
+      }]
     },
     options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x:{grid:{color:'#eef1f5'}}, y:{grid:{display:false},ticks:{font:{size:10}}} }
+      indexAxis: 'y', 
+      responsive: true, 
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          ...hBarDatalabels,
+          formatter: v => v,
+          color: '#2c3a47',
+          font: { weight: 'bold', size: 10 },
+        }
+      },
+      scales: { 
+        x:{grid:{color:'#eef1f5'}}, 
+        y:{grid:{display:false},ticks:{font:{size:10}}} 
+      }
     }
   });
 
@@ -1127,7 +1280,7 @@ function buildValueChains() {
     <tr>
       <td><span class="rank-num ${r.rank<=3?'top3':''}">${r.rank}</span></td>
       <td><strong>${r.vc}</strong></td>
-      <td style="font-size:.75rem;color:var(--grey-500)">${r.partners}</td>
+      <td style="font-size:.75rem;color:#4a5568">${r.partners}</td>
       <td class="num">${r.donors}</td>
       <td class="num">${r.projects}</td>
     </tr>`).join('');
@@ -1142,21 +1295,52 @@ function buildOverlap() {
     data: {
       labels: DATA.topTier.map(t=>t.crop),
       datasets: [
-        { label:'Projects', data: DATA.topTier.map(t=>t.projects), backgroundColor: BLUE, borderRadius:5 },
-        { label:'Donors',   data: DATA.topTier.map(t=>t.donors),   backgroundColor: GREEN, borderRadius:5 },
+        { 
+          label:'Projects', 
+          data: DATA.topTier.map(t=>t.projects), 
+          backgroundColor: BLUE, 
+          borderRadius:5 
+        },
+        { 
+          label:'Donors',   
+          data: DATA.topTier.map(t=>t.donors),   
+          backgroundColor: GREEN, 
+          borderRadius:5 
+        },
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display:true, position:'top', labels:{font:{size:10},boxWidth:10,padding:8} } },
-      scales: { x:{grid:{display:false}}, y:{grid:{color:'#eef1f5'},beginAtZero:true} }
+      responsive: true, 
+      maintainAspectRatio: false,
+      plugins: { 
+        legend: { 
+          display:true, 
+          position:'top', 
+          labels:{
+            font:{size:10},
+            boxWidth:10,
+            padding:8,
+            color: '#2c3a47'
+          } 
+        },
+        datalabels: {
+          ...barDatalabels,
+          formatter: v => v,
+          color: '#2c3a47',
+          font: { weight: 'bold', size: 10 },
+        }
+      },
+      scales: { 
+        x:{grid:{display:false}}, 
+        y:{grid:{color:'#eef1f5'},beginAtZero:true} 
+      }
     }
   });
 
   const el = document.getElementById('topCropDonors');
   el.innerHTML = DATA.topTier.map(t => `
     <div style="margin-bottom:14px">
-      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px">${t.crop}</div>
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:6px;color:#1a2633">${t.crop}</div>
       <div class="pill-wrap">
         ${t.partners.split(', ').map(p=>`<span class="pill blue">${p}</span>`).join('')}
       </div>
@@ -1191,11 +1375,28 @@ function buildThematic() {
     type: 'bar',
     data: {
       labels: DATA.thematic.map(t=>t.topic),
-      datasets: [{ data: DATA.thematic.map(t=>t.freq), backgroundColor: DATA.thematic.map(t=>freqColor(t.freq)), borderRadius:5 }]
+      datasets: [{ 
+        data: DATA.thematic.map(t=>t.freq), 
+        backgroundColor: DATA.thematic.map(t=>freqColor(t.freq)), 
+        borderRadius:5 
+      }]
     },
     options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x:{grid:{color:'#eef1f5'},max:4,ticks:{stepSize:1}}, y:{grid:{display:false},ticks:{font:{size:10}}} }
+      indexAxis: 'y', 
+      responsive: true, 
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          ...hBarDatalabels,
+          formatter: v => v,
+          color: '#2c3a47',
+          font: { weight: 'bold', size: 10 },
+        }
+      },
+      scales: { 
+        x:{grid:{color:'#eef1f5'},max:4,ticks:{stepSize:1}}, 
+        y:{grid:{display:false},ticks:{font:{size:10}}} 
+      }
     }
   });
 
