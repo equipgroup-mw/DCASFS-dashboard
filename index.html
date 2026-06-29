@@ -322,6 +322,173 @@
     background: var(--gold);
   }
 
+  /* ─── PWA INSTALL BUTTON ─────────────────────────────────── */
+  .pwa-install-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1000;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: none;
+    cursor: pointer;
+    box-shadow: 
+      0 0 20px rgba(168, 147, 90, 0.4),
+      0 0 40px rgba(168, 147, 90, 0.2),
+      0 0 60px rgba(168, 147, 90, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: floatButton 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+    overflow: visible;
+  }
+
+  .pwa-install-btn::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    z-index: -1;
+    animation: glowRing 2s ease-in-out infinite;
+  }
+
+  .pwa-install-btn::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid rgba(168, 147, 90, 0.3);
+    animation: glowRingOuter 2s ease-in-out infinite 0.3s;
+  }
+
+  @keyframes floatButton {
+    0%, 100% { 
+      transform: translateY(0px); 
+    }
+    50% { 
+      transform: translateY(-12px); 
+    }
+  }
+
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px rgba(168, 147, 90, 0.4),
+        0 0 40px rgba(168, 147, 90, 0.2),
+        0 0 60px rgba(168, 147, 90, 0.1),
+        0 8px 32px rgba(0, 0, 0, 0.3);
+      background: var(--gold);
+    }
+    50% {
+      box-shadow: 
+        0 0 30px rgba(168, 147, 90, 0.6),
+        0 0 60px rgba(168, 147, 90, 0.4),
+        0 0 80px rgba(168, 147, 90, 0.2),
+        0 8px 32px rgba(0, 0, 0, 0.4);
+      background: #b89d65;
+    }
+  }
+
+  @keyframes glowRing {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes glowRingOuter {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    50% {
+      opacity: 0.15;
+      transform: scale(1.1);
+    }
+  }
+
+  .pwa-install-btn:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 
+      0 0 40px rgba(168, 147, 90, 0.7),
+      0 0 80px rgba(168, 147, 90, 0.4),
+      0 0 120px rgba(168, 147, 90, 0.2),
+      0 12px 40px rgba(0, 0, 0, 0.4);
+    background: #b89d65;
+  }
+
+  .pwa-install-btn:active {
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  .pwa-install-btn svg {
+    width: 32px;
+    height: 32px;
+    fill: var(--white);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+  }
+
+  .pwa-install-btn:hover svg {
+    transform: scale(1.1);
+  }
+
+  /* ─── INSTALL TOOLTIP ────────────────────────────────────── */
+  .install-tooltip {
+    position: fixed;
+    bottom: 130px;
+    right: 20px;
+    z-index: 1001;
+    background: var(--white);
+    color: var(--navy);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+  }
+
+  .install-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--white);
+  }
+
+  .install-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── HIDDEN STATE ───────────────────────────────────────── */
+  .pwa-install-btn.hidden {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   /* ─── MOBILE ─────────────────────────────────────────────── */
   @media (max-width: 700px) {
     .landing-container {
@@ -358,6 +525,25 @@
       width: 250px;
       height: 250px;
     }
+    
+    .pwa-install-btn {
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+    }
+    
+    .pwa-install-btn svg {
+      width: 28px;
+      height: 28px;
+    }
+    
+    .install-tooltip {
+      bottom: 110px;
+      right: 10px;
+      font-size: 0.75rem;
+      padding: 10px 16px;
+    }
   }
 
   @media (max-width: 400px) {
@@ -371,6 +557,30 @@
       width: 90px;
       height: 90px;
     }
+    
+    .pwa-install-btn {
+      bottom: 20px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+    }
+    
+    .pwa-install-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pwa-install-btn,
+    .pwa-install-btn::before,
+    .pwa-install-btn::after {
+      animation: none;
+    }
+    
+    .pwa-install-btn {
+      transition: opacity 0.3s ease;
+    }
   }
 </style>
 </head>
@@ -380,6 +590,18 @@
   <div class="bg-pattern"></div>
   <div class="bg-glow gold"></div>
   <div class="bg-glow white"></div>
+
+  <!-- PWA Install Button -->
+  <button id="pwaInstallBtn" class="pwa-install-btn hidden" aria-label="Install DCAFS Dashboard app" title="Install app on your device">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 13.5v-5h2v5l3.5-3.5 1.42 1.42L12 18.34l-5.92-5.92L7.5 11 11 15.5zM12 4c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8z"/>
+    </svg>
+  </button>
+
+  <!-- Install Tooltip -->
+  <div id="installTooltip" class="install-tooltip">
+    💾 Install for offline access
+  </div>
 
   <!-- Main Content -->
   <div class="landing-container">
@@ -464,13 +686,117 @@
 
   </div>
 
-  <!-- Optional: keyboard navigation hint -->
   <script>
-    // Add subtle entrance animation for the prompt
+    // PWA Install Logic
+    let deferredPrompt;
+    const installBtn = document.getElementById('pwaInstallBtn');
+    const installTooltip = document.getElementById('installTooltip');
+    
+    // Check if app is already installed
+    function isAppInstalled() {
+      return window.matchMedia('(display-mode: standalone)').matches || 
+             window.navigator.standalone || 
+             document.referrer.includes('android-app://');
+    }
+
+    // Show install button if not installed
+    function showInstallButton() {
+      if (!isAppInstalled()) {
+        installBtn.classList.remove('hidden');
+        
+        // Show tooltip after a delay
+        setTimeout(() => {
+          if (!isAppInstalled() && !deferredPrompt) {
+            installTooltip.classList.add('visible');
+            setTimeout(() => {
+              installTooltip.classList.remove('visible');
+            }, 4000);
+          }
+        }, 3000);
+      }
+    }
+
+    // Listen for the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      deferredPrompt = e;
+      // Show the install button
+      showInstallButton();
+      
+      console.log('💡 PWA install prompt available');
+    });
+
+    // Handle install button click
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        // If no deferred prompt, provide manual instructions
+        alert('To install: \n\n• iOS: Tap the Share button → "Add to Home Screen"\n• Android: Tap the menu (⋮) → "Install app" or "Add to Home Screen"\n• Desktop: Look for the install icon (⊕) in the address bar');
+        installTooltip.classList.remove('visible');
+        return;
+      }
+
+      // Show the install prompt
+      deferredPrompt.prompt();
+      
+      // Wait for the user to respond to the prompt
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      console.log(`User ${outcome} the installation`);
+      
+      // Clear the deferredPrompt variable
+      deferredPrompt = null;
+      
+      // Hide the install button and tooltip
+      installBtn.classList.add('hidden');
+      installTooltip.classList.remove('visible');
+      
+      // Check if app was installed
+      if (outcome === 'accepted') {
+        console.log('🎉 PWA installed successfully!');
+      }
+    });
+
+    // Listen for successful installation
+    window.addEventListener('appinstalled', () => {
+      console.log('✅ PWA installed successfully');
+      installBtn.classList.add('hidden');
+      installTooltip.classList.remove('visible');
+      deferredPrompt = null;
+    });
+
+    // Show tooltip on hover
+    installBtn.addEventListener('mouseenter', () => {
+      if (deferredPrompt) {
+        installTooltip.classList.add('visible');
+      }
+    });
+
+    installBtn.addEventListener('mouseleave', () => {
+      installTooltip.classList.remove('visible');
+    });
+
+    // Check on load
+    window.addEventListener('load', () => {
+      // If app is already installed, hide the button
+      if (isAppInstalled()) {
+        installBtn.classList.add('hidden');
+        console.log('📱 App already installed');
+      } else {
+        // Show button after a delay if no prompt event
+        setTimeout(() => {
+          if (!deferredPrompt && !isAppInstalled()) {
+            showInstallButton();
+          }
+        }, 2000);
+      }
+    });
+
+    // Original keyboard navigation and card interactions
     document.addEventListener('DOMContentLoaded', () => {
       const cards = document.querySelectorAll('.logo-card');
       
-      // Add hover sound/feedback (visual only)
       cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
           card.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
@@ -491,21 +817,25 @@
         'background:#a8935a;color:#fff;padding:6px 10px;border-radius:0 4px 4px 0;');
       console.log('%c Press 1 or D for DCAFS | Press 2 or E for EQUIP',
         'color:#a8935a;font-style:italic;');
+      console.log('%c 💡 Install this app for offline access!',
+        'color:#a8935a;font-weight:bold;');
     });
+  </script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(registration => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
   </script>
 
 </body>
 </html>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      })
-      .catch(error => {
-        console.error('Service Worker registration failed:', error);
-      });
-  });
-}
-</script>
