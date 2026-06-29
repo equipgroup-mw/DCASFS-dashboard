@@ -4,7 +4,7 @@
   "description": "Dashboards for the Donor Committee on Agriculture and Food Security",
   "orientation": "portrait",
   "scope": "/",
-  "start_url": "/index.html",
+  "start_url": "/DCASFS-dashboard/",
   "display": "standalone",
   "background_color": "#0d2136",
   "theme_color": "#0d2136",
