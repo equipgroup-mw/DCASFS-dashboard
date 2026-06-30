@@ -4,7 +4,7 @@
   "description": "Donor Committee on Agriculture and Food Security - Investment & Coordination Data",
   "id": "dcafs-malawi-2026",
   "orientation": "portrait",
-  "scope": "/",
+  "scope": "/DCAFS-dashboard/",
   "start_url": "/DCAFS-dashboard/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
